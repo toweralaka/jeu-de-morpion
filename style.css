@@ -19,3 +19,36 @@ body {
     border-radius: 8px;
     box-shadow: 1px 1px 1px 2px aqua;
 }
+.info-div {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+}
+
+.info-div div {
+    height: 40px;
+}
+.controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.controls button {
+    padding: 10px;
+    background-color: aquamarine;
+    border: aquamarine;
+    color: #333;
+    border-radius: 8px;
+}
+#board-div {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+#board-div button {
+    width: max(33%, 50px);
+    height: 50px;
+}

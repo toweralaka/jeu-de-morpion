@@ -7,7 +7,7 @@ const newGameBoard = (function gameBoard(){
         for(let i = 0; i < boardSize; i++){
             let newRow = [];
             for(let j = 0; j < boardSize; j++){
-                newRow.push(0);
+                newRow.push("");
             }
             board.push(newRow);
         }
@@ -17,7 +17,7 @@ const newGameBoard = (function gameBoard(){
     const isFilled = ()=>{
         for(let i = 0; i < boardSize; i++){
             for(let j = 0; j < boardSize; j++){
-                if(board[i][j] == 0){
+                if(board[i][j] == ""){
                     return false
                 }
             }
@@ -74,10 +74,17 @@ const newGameBoard = (function gameBoard(){
 
     const dropMarker = (row, col, marker)=>{
         // if the spot has been filled, ignore
-        if(board[row][col] !== 0){return false}
+        if(board[row][col] !== ""){return false}
         board[row][col] = marker
-        console.table(board)
         return true
+    }
+    const resetBoard = ()=>{
+        for(let i = 0; i < boardSize; i++){
+            let newRow = board[i];
+            for(let j = 0; j < boardSize; j++){
+                newRow[j] = "";
+            }
+        }
     }
 
     const getBoardSize = ()=>boardSize;
@@ -85,7 +92,7 @@ const newGameBoard = (function gameBoard(){
     startBoard()
     return {
         board, dropMarker, isFilled, getMarkers,
-        isWin, getWinMarker, getBoardSize}
+        isWin, getWinMarker, getBoardSize, resetBoard}
 })()
 
 function GameController(){
@@ -96,11 +103,17 @@ function GameController(){
     let players = [playerOne, playerTwo];
     let currentPlayer = players[0];
     let gameOver = false;
+    let status = "";
+    let scores = "";
+
+    const getScores = ()=>scores;
+
+    const getStatus = ()=>status;
 
     const switchPlayerTurn = ()=>{
         if(gameOver == true){return}
         currentPlayer = currentPlayer === playerOne ? playerTwo : playerOne;
-        console.log(`It is ${currentPlayer.name}'s turn`)
+        status = `It is ${currentPlayer.name}'s turn`;
     }
 
     const getWinner = ()=>{
@@ -116,8 +129,19 @@ function GameController(){
         if(gameBoard.isWin() == true && theWinner != null){
             gameOver = true;
             theWinner.addPoint();
-            console.log(`${theWinner.name} wins! Start new round.`)
+            status = `${theWinner.name} wins! Start new round.`;
+            scores = `
+            ${playerOne.name}: ${playerOne.getPoints()},
+            ${playerTwo.name}: ${playerTwo.getPoints()}`
+            currentPlayer = theWinner;
         }
+    }
+
+    const setRound = ()=>{
+        gameOver = false;
+        currentPlayer = players[0];
+        status = `It is ${currentPlayer.name}'s turn`;
+
     }
 
     const playTurn = (theRow, theCol)=>{
@@ -129,7 +153,7 @@ function GameController(){
             switchPlayerTurn()
         }
     }
-    return {playTurn}
+    return {playTurn, getScores, getStatus, setRound}
 }
 
 function player(name, marker){
@@ -139,7 +163,52 @@ function player(name, marker){
     return {name, marker, getPoints, addPoint}
 }
 
-// function domDisplayController(){
+function domDisplayController(){
+    let scoresDiv = document.querySelector("#scores-div");
+    let statusDiv = document.querySelector("#status-div");
+    let boardDiv = document.querySelector("#board-div");
+    let startRoundBtn = document.querySelector("#round-btn");
+    let restartBtn = document.querySelector("#restart-btn");
+    // let firstPlayerName
+    let newGame = GameController()
 
-// }
-const myGame = GameController()
+    // const getPlayersName = ()=>{
+
+    // }
+    const showScores = ()=>{
+        scoresDiv.textContent = newGame.getScores();
+    }
+
+    const showStatus = ()=>{
+        statusDiv.textContent = newGame.getStatus();
+    }
+    const renderBoard = ()=>{
+        boardDiv.innerHTML = "";
+        let theBoard = newGameBoard.board
+        for(let i = 0; i < theBoard.length; i++){
+            for(let j = 0; j < theBoard.length; j++){
+                let newBtn = document.createElement("button");
+                newBtn.setAttribute("class", "play-btn");
+                newBtn.addEventListener("click",()=>{
+                    newGame.playTurn(i, j);
+                    renderBoard();
+                })
+                newBtn.textContent=theBoard[i][j]
+                boardDiv.appendChild(newBtn);
+            }
+        }
+        showScores();
+        showStatus();
+    }
+    const cleanBoard = ()=>{
+        newGameBoard.resetBoard();
+        renderBoard();
+        newGame.setRound();
+    }
+    startRoundBtn.addEventListener("click", cleanBoard);
+    restartBtn.addEventListener("click", ()=>{
+        //reload page
+    })
+    renderBoard()
+}
+domDisplayController()
