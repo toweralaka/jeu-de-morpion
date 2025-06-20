@@ -18,4 +18,75 @@ body {
     margin: 2rem auto;
     border-radius: 8px;
     box-shadow: 1px 1px 1px 2px aqua;
+    position: relative;
+}
+.game {
+    width: 97%;
+    height: 97%;
+    margin: auto;
+    background-color: black;
+    border-radius: 8px;
+}
+.players-div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    border-radius: 8px;
+    background-color: beige;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+}
+.hide {
+    width: 0px;
+    height: 0px;
+    overflow: hidden;
+    z-index: -1;
+    background-color: transparent;
+}
+.players-div input {
+    height: 40px;
+    margin: 10px 0;
+}
+.players-div button {
+    padding: 10px;
+    width: 50%;
+}
+.info-div {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+}
+
+.info-div div {
+    height: 40px;
+}
+.controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.controls button {
+    padding: 10px;
+    background-color: aquamarine;
+    border: aquamarine;
+    color: #333;
+    border-radius: 8px;
+}
+#board-div {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+#board-div button {
+    width: max(33%, 50px);
+    height: 50px;
 }
