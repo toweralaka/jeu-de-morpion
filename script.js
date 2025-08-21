@@ -203,7 +203,6 @@ const domDisplayController = (function (){
     let restartBtn = document.querySelector("#restart-btn");
     let startBtn = document.querySelector(".start-btn");
     let playerDiv = document.querySelector(".players-div");
-    // let firstPlayerName
     let newGame = GameController;
 
     const getPlayersName = ()=>{
